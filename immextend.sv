@@ -6,14 +6,6 @@ module immextend(input logic[31:0] instr,
   // negative numbers stay negative when extended to 32 bits!
 
   // Need to edit this to add in extend for load/store!!
-  // logic[19:0] extend = '0;
-
-  // initial begin    
-  //   if (instr[31] == 1) begin
-  //     extend = '1;
-  //   end
-  // end
-
   logic[19:0] extend;
   logic sign_bit;
   
@@ -28,7 +20,7 @@ module immextend(input logic[31:0] instr,
     end
   end
   
-  assign imm32 = instr[6:0] == 7'h23 ? {extend, instr[31:20]} : {instr[31:25], instr[11:7]};
+  assign imm32 = instr[6:0] != 7'h23 ? {extend, instr[31:20]} : {extend, instr[31:25], instr[11:7]};
   
 
 endmodule

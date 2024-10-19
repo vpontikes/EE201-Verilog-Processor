@@ -18,7 +18,8 @@ module immextend_enable_test;
     $dumpvars(0, immextend_enable_test); // Dump all of the signals in the DUT
 
     $display("Beginning of immextend test...");
-
+    #5;
+    
     // Check for correct extension
     assert(imm32 == {fill, 5'b01100}) else $error("Immediate extension did not work: Expected -20 but got %b !", imm32);
     #1000;
