@@ -19,10 +19,41 @@ module immextend_enable_test;
 
     $display("Beginning of immextend test...");
     #5;
-    
-    // Check for correct extension
+
+    // Checking load/alu immediates
     assert(imm32 == {fill, 5'b01100}) else $error("Immediate extension did not work: Expected -20 but got %b !", imm32);
-    #1000;
+    #100;
+
+    instr = 32'h001xxxX3;
+    #5;
+    assert(imm32 == 32'h01) else $error("Immediate extension did not work: Expected 1 but got %h !", imm32);
+
+
+    instr = 32'h800xxxX3;
+    #5;
+    assert(imm32 == 32'hfffff800) else $error("Immediate extension did not work: Expected fffff800 but got %h !", imm32);
+    
+    // Checking store immediates
+    instr = 32'h0c322423;
+    #5;
+    assert(imm32 == 32'hc8) else $error("Immediate extension did not work: Expected c8 but got %h !", imm32);
+
+    instr = 32'h1b222a23;
+    #5;
+    assert(imm32 == 32'h1b4) else $error("Immediate extension did not work: Expected 1b4 but got %h !", imm32);
+
+    instr = 32'hfe344023;
+    #5;
+    assert(imm32 == 32'hffffffe0) else $error("Immediate extension did not work: Expected fe0 but got %h !", imm32);
+
+    instr = 32'h7d523a23;
+    #5;
+    assert(imm32 == 32'h7d4) else $error("Immediate extension did not work: Expected 7d4 but got %h !", imm32);
+
+    instr = 32'h00012023;
+    #5;
+    assert(imm32 == 32'h0) else $error("Immediate extension did not work: Expected 0 but got %h !", imm32);
+
 
     $display("Test complete!");
     $finish;

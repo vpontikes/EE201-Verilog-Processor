@@ -10,17 +10,25 @@ module immextend(input logic[31:0] instr,
   logic sign_bit;
   
   assign sign_bit = instr[31];
+  // assign extend = (sign_bit == 1) ? 20'b11111111111111111111 : 20'b00000000000000000000;
 
   // Use always_comb block so immediate is updated everytime a new value of instruction is passed
+  // Always_comb block doesn't allow for constant selects inside, so warnings will come up but this works
   always_comb begin
     if (sign_bit == 1) begin
       extend = 20'b11111111111111111111;
     end else begin
       extend = 20'b00000000000000000000;
     end
+
+    if (instr[6:0] == 7'h23) begin
+      imm32 = {extend, instr[31:25], instr[11:7]};
+    end else begin
+      imm32 = {extend, instr[31:20]};
+    end
   end
   
-  assign imm32 = instr[6:0] != 7'h23 ? {extend, instr[31:20]} : {extend, instr[31:25], instr[11:7]};
+  // assign imm32 = (instr[6:0] == 7'h23) ? {extend, instr[31:25], instr[11:7]} : {extend, instr[31:20]};
   
 
 endmodule
