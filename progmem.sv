@@ -18,10 +18,19 @@ module progmem(input logic[31:0] addr,
 
     always_comb
       case(addr)
-        32'h0:  instr = 32'h00600093; // li x1, 6
-        32'h4:  instr = 32'h00a00113; // li x2, 10
-        32'h8:  instr = 32'h0030f093; // andi x1, x1, 0b11
-        32'hc:  instr = 32'h401100b3; // sub x1, x2, x1
+        // // ALU only
+        // 32'h0:  instr = 32'h00600093; // li x1, 6
+        // 32'h4:  instr = 32'h00a00113; // li x2, 10
+        // 32'h8:  instr = 32'h0030f093; // andi x1, x1, 0b11
+        // 32'hc:  instr = 32'h401100b3; // sub x1, x2, x1
+        
+        // Load / Store
+        32'h0:  instr = 32'h10000093; // li x1, 0x100
+        32'h4:  instr = 32'h00500113; // li x2, 5
+        32'h8:  instr = 32'h0020a023; // sw x2, 0, x1
+        32'hc:  instr = 32'h0000a183; // lw x3, 0, x1
+        32'h10: instr = 32'h0000a183; // addi x3, x3, 10
+        32'h14: instr = 32'h0030a023; // sw, x3, 0, x1
       default: instr = 0;
     endcase
 

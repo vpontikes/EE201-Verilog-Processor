@@ -17,6 +17,7 @@ module processor_test;
         $dumpvars; // Dump all of the signals in the DUT
         $dumpvars(0, dut.rf_inst.registers[1]); // Save register 15 because arrays aren't saved by default
         $dumpvars(0, dut.rf_inst.registers[2]);
+        $dumpvars(0, dut.rf_inst.registers[3]);
 
         // Now run the test: just toggle reset and run the clock for a while
         $display("(reset asserted)");
