@@ -20,8 +20,8 @@ module processor(input logic clk,
   logic[31:0] result;
   logic write_enable_store;
   logic[31:0] data;
-  logic[3:0] alu_operation;
-  logic[31:0] alu_operand; 
+//   logic[3:0] alu_operation;
+//   logic[31:0] alu_operand; 
 
   // Instantiate and connect to program counter
   pc pc_inst(.clk(clk), 
@@ -58,35 +58,35 @@ module processor(input logic clk,
                   .data_in(rf_inst.data2));
 
   // Instantiate and connect to decoder
-  decoder decode_inst(.instr(pm_inst.instr),
-                      .imm32(im_inst.imm32),
-                      .data2(rf_inst.data2),
-                      .alu_operation(alu_operation),
-                      .alu_operand(alu_operand));
+//   decoder decode_inst(.instr(pm_inst.instr),
+//                       .imm32(im_inst.imm32),
+//                       .data2(rf_inst.data2),
+//                       .alu_operation(alu_operation),
+//                       .alu_operand(alu_operand));
 
-//   logic[3:0] operation;
-//   logic[31:0] opr2;
+  logic[3:0] operation;
+  logic[31:0] opr2;
   
-//   // If opcode = 0x03 (load), set ALU operation to ADD and use immediate
-//   logic load_check;
-//   assign load_check = pm_inst.instr[6:0] == 7'h03 ? 1 : 0;
+  // If opcode = 0x03 (load), set ALU operation to ADD and use immediate
+  logic load_check;
+  assign load_check = pm_inst.instr[6:0] == 7'h03 ? 1 : 0;
 
-//   always_comb begin
-//     if (load_check) 
-//     begin
-//       operation = 4'b0000;
-//       opr2 = im_inst.imm32;
-//     end else 
-//     begin 
-//       operation = {pm_inst.instr[30], pm_inst.instr[14:12]};
-//       opr2 = pm_inst.instr[5] == 1 ? rf_inst.data2 : im_inst.imm32;
-//     end
-//   end
+  always_comb begin
+    if (load_check) 
+    begin
+      operation = 4'b0000;
+      opr2 = im_inst.imm32;
+    end else 
+    begin 
+      operation = {pm_inst.instr[30], pm_inst.instr[14:12]};
+      opr2 = pm_inst.instr[5] == 1 ? rf_inst.data2 : im_inst.imm32;
+    end
+  end
   
   // Instatiate and connect to alu
   alu alu_inst(.operand1(rf_inst.data1),
-               .operand2(decode_inst.alu_operand),
-               .operation(decode_inst.alu_operation),
+               .operand2(opr2), //decode_inst.alu_operand
+               .operation(operation), //decode_inst.alu_operation
                .result(result));
 
 endmodule
